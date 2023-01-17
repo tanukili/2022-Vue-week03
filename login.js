@@ -7,12 +7,22 @@ const app ={
             user: {
                 username: '',
                 password: ''
-            }
+            },
+            apiUrl: 'https://vue3-course-api.hexschool.io/v2'
         }
     },
     methods: {
         login(){
-            console.log(this.user.username ,this.user.password);
+            // 串接登入 api
+            const url = `${this.apiUrl}/admin/signin`;
+            axios.post(url ,this.user)
+                .then((res) => {
+                    window.location = 'products.html';
+                })
+                .catch((err) => {
+                    alert(err.data.message);
+                })
+
         }
     },
 
