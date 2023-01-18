@@ -22,6 +22,8 @@ const app = {
                 })
                 .catch((err) => {
                     alert(err.data.message);
+                    // 導回登入頁面
+                    window.location = 'login.html'
                 })
         },
         // 串接 api：取得產品資料
