@@ -3,7 +3,6 @@ import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.45/vue
 
 // 宣告 Modal (因為全域會使用到)
 let productModal = {};
-
 let delProductModal = {};
 
 const app = {
@@ -13,7 +12,10 @@ const app = {
             apiUrl: 'https://vue3-course-api.hexschool.io/v2',
             apiPath: 'vuejslive2022',
             products: [],
-
+            tempProduct: {
+                imagesUrl: [],
+            },
+            isNew: false,
         }
     },
     // 使用 created() 會報錯，因為是 html 渲染前調用；mounted() 則是渲染後再針對 html 的 dom 進行操作
@@ -53,23 +55,31 @@ const app = {
             axios.get(url)
                 .then((res) => {
                     this.products= res.data.products;
+                    console.log(this.products);
                 })
                 .catch((err) => {
                     alert(err.data.message);
                 })
         },
-        // 開啟互動視窗
-        openModal(editStatus) {
-            if(editStatus === 'new'){
-                productModal.show();
-            }else if(editStatus === 'edit'){
-                productModal.show();
-            }else if(editStatus === 'delete'){
-                delProductModal.show();
-            }
+        // 更新資料：混和多個類似的程式碼
+        updateProduct() {
+            const url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
+            axios.post(url, { data: this.tempProduct})
+                .then((res) => {
+                    console.log(res);
+                    this.getData();
+                    // 關閉視窗
+                    productModal.hide();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        },
+        // 開啟 modal
+        openModal() {
+            productModal.show();
         }
-        
     },
 };
-
+  
 createApp(app).mount('#app')
