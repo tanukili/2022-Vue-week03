@@ -73,14 +73,13 @@ const app = {
             }
             // 將 api 方透過變數寫入
             axios[method](url, { data: this.tempProduct})
-                .then((res) => {
-                    console.log(res);
+                .then(() => {
                     this.getData();
                     // 關閉視窗
                     productModal.hide();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    alert(err.data.message);
                 })
         },
         // 開啟 modal
@@ -99,6 +98,11 @@ const app = {
                 // 帶入要編輯的資料（透過參數傳遞）
                 // 物件傳參考特性，使用展開運算子淺層拷貝
                 this.tempProduct = {...product};
+                // 若 imagesUrl 非陣列，在編輯時轉為，以加入新圖片
+                if (!Array.isArray(product.imagesUrl)){
+                    product.imagesUrl = [];
+                    this.tempProduct = {...product};
+                };
             }
         }
     },
