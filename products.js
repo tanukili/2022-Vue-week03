@@ -103,7 +103,23 @@ const app = {
                     product.imagesUrl = [];
                     this.tempProduct = {...product};
                 };
+            }else if (status === 'delete'){
+                delProductModal.show();
+                this.tempProduct = {...product}; // 等等取 id 使用
             }
+        },
+        // 刪除資料
+        deleteProduct() {
+            const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
+            axios.delete(url)
+                .then(() => {
+                    this.getData();
+                    // 關閉視窗
+                    delProductModal.hide();
+                })
+                .catch((err) => {
+                    alert(err.data.message);
+                })
         }
     },
 };
