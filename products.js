@@ -13,9 +13,10 @@ const app = {
             apiPath: 'vuejslive2022',
             products: [],
             tempProduct: {
+                // 若有內層的 arr 或 obj，建議初始化時帶上
                 imagesUrl: [],
             },
-            isNew: false,
+            isNew: false, // 確認是編輯或新增用
         }
     },
     // 使用 created() 會報錯，因為是 html 渲染前調用；mounted() 則是渲染後再針對 html 的 dom 進行操作
@@ -61,10 +62,17 @@ const app = {
                     alert(err.data.message);
                 })
         },
-        // 更新資料：混和多個類似的程式碼
+        // 更新資料：混和多個類似的程式碼（例如:路徑相似、資料格式相同）
         updateProduct() {
-            const url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
-            axios.post(url, { data: this.tempProduct})
+            let url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
+            let method = 'post'
+            // 用 isNew 判斷 API 怎麼運行，若不是新增資料則替換掉 url 和 method
+            if (!this.isNew) {
+                url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
+                method = 'put';
+            }
+            // 將 api 方透過變數寫入
+            axios[method](url, { data: this.tempProduct})
                 .then((res) => {
                     console.log(res);
                     this.getData();
@@ -76,8 +84,22 @@ const app = {
                 })
         },
         // 開啟 modal
-        openModal() {
-            productModal.show();
+        openModal(status, product) {
+            // 判斷要開啟的 modal
+            if (status === 'create') {
+                productModal.show();
+                this.isNew = true; // 是新增品項
+                // 帶入初始化資料
+                this.tempProduct = {
+                    imagesUrl: [],
+                };
+            }else if (status === 'edit') {
+                productModal.show();
+                this.isNew = false; // 不是新增品項
+                // 帶入要編輯的資料（透過參數傳遞）
+                // 物件傳參考特性，使用展開運算子淺層拷貝
+                this.tempProduct = {...product};
+            }
         }
     },
 };

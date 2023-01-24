@@ -15,7 +15,7 @@
     <div id="app">
       <div class="container">
         <div class="text-end mt-4">
-          <button class="btn btn-primary" @click="openModal">
+          <button class="btn btn-primary" @click="openModal('create')">
             建立新的產品
           </button>
         </div>
@@ -50,8 +50,9 @@
                 <span :class="{'text-success' : product.is_enabled}"> {{ product.is_enabled ? '啟用' : '未啟用' }}</span>
               </td>
               <td>
+                <!-- 觸發邊機方法並傳遞當前品項 -->
                 <div class="btn-group">
-                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openModal('edit')">
+                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openModal('edit', product)">
                     編輯
                   </button>
                   <button type="button" class="btn btn-outline-danger btn-sm" @click="openModal('delete')">
