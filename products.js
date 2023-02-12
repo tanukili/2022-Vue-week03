@@ -2,8 +2,8 @@
 import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.45/vue.esm-browser.min.js';
 
 // 宣告 Modal (因為全域會使用到)
-let productModal = {};
-let delProductModal = {};
+let productModal = null;
+let delProductModal = null;
 
 const app = {
     data() {
@@ -56,7 +56,6 @@ const app = {
             axios.get(url)
                 .then((res) => {
                     this.products= res.data.products;
-                    console.log(this.products);
                 })
                 .catch((err) => {
                     alert(err.data.message);
@@ -65,7 +64,7 @@ const app = {
         // 更新資料：混和多個類似的程式碼（例如:路徑相似、資料格式相同）
         updateProduct() {
             let url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
-            let method = 'post'
+            let method = 'post';
             // 用 isNew 判斷 API 怎麼運行，若不是新增資料則替換掉 url 和 method
             if (!this.isNew) {
                 url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
@@ -73,7 +72,8 @@ const app = {
             }
             // 將 api 方透過變數寫入
             axios[method](url, { data: this.tempProduct})
-                .then(() => {
+                .then((res) => {
+                    alert(res.data.message);
                     this.getData();
                     // 關閉視窗
                     productModal.hide();
@@ -124,4 +124,4 @@ const app = {
     },
 };
   
-createApp(app).mount('#app')
+createApp(app).mount('#app');

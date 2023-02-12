@@ -71,7 +71,7 @@
           <div class="modal-content border-0">
             <div class="modal-header bg-dark text-white">
               <h5 id="productModalLabel" class="modal-title">
-                <span>新增產品</span>
+                <span>{{ isNew ? '新增產品' : '編輯產品' }}</span>
               </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -88,7 +88,7 @@
                   </div>
                   <div>
                     <!-- 判斷 tempProduct.imagesUrl 是一個陣列（避免資料格式錯誤造成意外） -->
-                    <div v-if="Array.isArray(tempProduct.imagesUrl)">
+                    <template v-if="Array.isArray(tempProduct.imagesUrl)">
                     <!-- 當沒有 id 時，可以設定 key + 字串 -->
                       <template v-for="(img, key) in tempProduct.imagesUrl" :key="key + 123">
                       <!-- 當需要調整陣列中的原始值時，最好使用索引值帶入（傳參考特性） -->
@@ -104,7 +104,7 @@
                       <button class="btn btn-outline-danger btn-sm d-block w-100" @click="tempProduct.imagesUrl.pop('')" v-else="!tempProduct.imagesUrl.length">
                       刪除圖片
                       </button>
-                    </div>
+                    </template>
                   </div>
                 </div>
                 <div class="col-sm-8">
